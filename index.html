@@ -33,13 +33,30 @@
             --black: #000000;
         }
 
-        body {
+        html, body {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             background-color: #f0f0f0;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #app {
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            transform-origin: top left;
         }
 
         button {
@@ -394,6 +411,33 @@
     <div id="notification-container" class="notification-container"></div>
     
     <script>
+    // Scale the game to fit the window while maintaining aspect ratio
+    function scaleGame() {
+        const app = document.getElementById('app');
+        const gameWidth = 1920;
+        const gameHeight = 1080;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate scale ratio
+        const scaleX = windowWidth / gameWidth;
+        const scaleY = windowHeight / gameHeight;
+        const scale = Math.min(scaleX, scaleY);
+        
+        // Apply transform
+        app.style.transform = `scale(${scale})`;
+        
+        // Center the game
+        const marginLeft = (windowWidth - (gameWidth * scale)) / 2;
+        const marginTop = (windowHeight - (gameHeight * scale)) / 2;
+        app.style.marginLeft = `${marginLeft}px`;
+        app.style.marginTop = `${marginTop}px`;
+    }
+
+    // Apply scaling on load and window resize
+    window.addEventListener('load', scaleGame);
+    window.addEventListener('resize', scaleGame);
+
     document.addEventListener('DOMContentLoaded', () => {
 
         // --- STATE MANAGEMENT ---
